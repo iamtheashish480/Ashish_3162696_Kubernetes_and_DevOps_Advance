@@ -1,0 +1,14 @@
+{
+  "name": "ashish-3162696-kubernetes-devops-advance",
+  "version": "1.0.0",
+  "description": "Node.js multi-tier PostgreSQL API tier",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "helmet": "^8.2.0",
+    "pg": "^8.11.5"
+  }
+}
