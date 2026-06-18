@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nodejs-app
+  name: ashish-3162696-kubernetes-and-devops-advance-app
 spec:
   replicas: 4
   strategy:
@@ -11,15 +11,16 @@ spec:
       maxUnavailable: 0
   selector:
     matchLabels:
-      app: nodejs-api
+      app: ashish_3162696_kubernetes_and_devops_advance-api
   template:
     metadata:
       labels:
-        app: nodejs-api
+        app: ashish_3162696_kubernetes_and_devops_advance-api
     spec:
       containers:
-        - name: nodejs-app
-          image: iamashish480/nodejs-app:latest # Replace with your actual image
+        - name: ashish-3162696-kubernetes-and-devops-advance-app
+          image: iamashish480/ashish_3162696_kubernetes_and_devops_advance-app:v3 # Replace with your actual image4
+          imagePullPolicy: Always 
           ports:
             - containerPort: 8000
           env:

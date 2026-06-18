@@ -1,5 +1,5 @@
 const express = require('express');
-const { pool } = require('./pool');
+const  pool  = require('./pool');
 
 const app = express();
 const port = process.env.PORT || 8000;

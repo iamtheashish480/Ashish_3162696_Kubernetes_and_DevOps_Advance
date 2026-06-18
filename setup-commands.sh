@@ -20,10 +20,12 @@ git push -u origin main
 
 # --------------------
 
-docker build -t iamashish480/nodejs-app:v1 .
+#docker rmi -f iamashish480/ashish_3162696_kubernetes_and_devops_advance-app:v1
+#docker system prune -a --volumes -f
+docker build --no-cache -t iamashish480/ashish_3162696_kubernetes_and_devops_advance-app:v1 .
 
 docker login
-docker push iamashish480/nodejs-app:v1
+docker push iamashish480/ashish_3162696_kubernetes_and_devops_advance-app:v1
 
 # --------------------
 
@@ -62,8 +64,7 @@ kubectl get all,pvc,ingress,hpa
 
 # Access service
 
-minikube service nodejs-service --url
-
+minikube service ashish-3162696-kubernetes-and-devops-advance-service --url
 # Self-healing test
 
 kubectl get pods

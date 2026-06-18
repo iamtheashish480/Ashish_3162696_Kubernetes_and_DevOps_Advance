@@ -22,6 +22,7 @@ The application consists of two main components:
 ### 1. Node.js Application
 
 * Developed using Node.js and Express.
+* Allows to view data and specific record, add update like operations
 * Provides REST APIs to interact with the database.
 * Runs inside a Kubernetes Deployment with multiple replicas.
 * Exposed through a Kubernetes Service.

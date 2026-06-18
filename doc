@@ -1,0 +1,91 @@
+## Requirement Understanding
+
+This project is for deploying a small multi-tier application on Kubernetes. The backend is a Node.js API and the database is PostgreSQL. The application will be tested locally first and then deployed on Google Kubernetes Engine (GKE). The main requirement is not just to run the application, but to show the complete DevOps flow around it: Docker image creation, Kubernetes deployment, service exposure, configuration handling, persistence, pod recovery, and basic autoscaling.
+
+The application stores employee details in a PostgreSQL table. The API exposes endpoints for adding, reading, updating, and deleting employee records. PostgreSQL is initialized with an SQL script so that the database has the required table and sample data when the pod starts for the first time.
+
+The Kubernetes part of the project should prove the following points:
+
+- The Node.js application can run from a Docker image.
+- The API and database are deployed as separate components.
+- Database connection values are not hard-coded in the application.
+- The database keeps its data after the PostgreSQL pod is deleted.
+- Kubernetes recreates pods automatically when they are removed.
+- The API can be accessed from outside the cluster.
+- The Node.js pods can scale based on CPU usage.
+
+## Assumptions
+
+I have made these assumptions while preparing the solution:
+
+- The deployment will be tested locally on Minikube before moving it to GKE.
+- Minikube is started with the Docker driver for local validation.
+- GKE is the final Kubernetes environment where the same manifests will be deployed after local testing.
+- A Google Cloud project, GKE cluster, and kubectl context will be available before deploying to GKE.
+- Docker, Minikube, and kubectl are already installed on the system.
+- The Node.js image is pushed to Docker Hub as `iamashish480/ashish_3162696_kubernetes_and_devops_advance-app`
+- The NGINX ingress addon is enabled before testing the ingress route.
+- PostgreSQL runs inside the same Kubernetes cluster as the Node.js API.
+- One PostgreSQL pod is enough for this assignment because the focus is persistence, not database high availability.
+- The password is stored in a Kubernetes Secret. For this local assignment setup, base64 encoding is acceptable.
+- The API container listens on port `8000`.
+- The Node.js service forwards traffic from port `80` to container port `8000`.
+- The PostgreSQL service is only used inside the cluster on port `5432`.
+- Autoscaling is required only for the stateless Node.js API, not for PostgreSQL.
+
+## Solution Overview
+
+The solution is split into two main parts: the application container and the Kubernetes resources.
+
+The application is a Node.js Express API. It connects to PostgreSQL using environment variables for the database host, database name, username, and password. These values are supplied by Kubernetes instead of being written directly in the application code.
+
+The Dockerfile builds the Node.js application image. It uses a lightweight Node Alpine image and installs only production dependencies. The final container runs the API on port `8000`.
+
+On the Kubernetes side, the Node.js API is deployed using the `nodejs-app` Deployment. It starts with 4 replicas, which helps show availability and also gives the HPA something to manage. The API pods use values from `app-config` and `app-secret` to connect to PostgreSQL.
+
+PostgreSQL is deployed separately using the `postgres-db` Deployment. Its data directory is mounted to a PersistentVolumeClaim named `postgres-pvc`, so deleting the PostgreSQL pod does not remove the stored database files. The database schema and initial records are provided through the `postgres-init-script` ConfigMap.
+
+Networking is handled through Kubernetes Services. The PostgreSQL service is a ClusterIP service because only the API needs to reach it. The Node.js service is a NodePort service so it can be tested easily from Minikube during local checks. For GKE, the ingress file can be used to expose the application through an external endpoint after the cluster ingress setup is ready.
+
+The HPA targets the Node.js Deployment and allows the API tier to scale from 4 to 10 pods when CPU usage increases. PostgreSQL is not autoscaled because it is stateful and needs a different setup for production-level scaling.
+
+The basic deployment order is:
+
+1. Build the Docker image for the Node.js app.
+2. Push the image to Docker Hub.
+3. Start Minikube and enable ingress for local testing.
+4. Apply the ConfigMap and Secret files locally.
+5. Apply the PostgreSQL PVC, deployment, init script, and service locally.
+6. Apply the Node.js deployment, service, HPA, and ingress locally.
+7. Check the running resources using `kubectl get all,pvc,ingress,hpa`.
+8. Test the API URL from Minikube.
+9. Delete pods manually to confirm self-healing and database persistence.
+10. After local verification, switch kubectl to the GKE cluster context.
+11. Apply the same Kubernetes manifests on GKE.
+12. Verify the GKE resources and test the external application endpoint.
+
+## Justification for the Resources Utilized
+
+The Dockerfile is used because the Node.js application has to be packaged in a consistent way before it can run in Kubernetes. Using an Alpine-based Node image keeps the image small enough for a simple assignment deployment.
+
+The Node.js Deployment is used for the API because the application is stateless. Multiple replicas can run at the same time, and Kubernetes can replace a failed pod automatically. This also makes it suitable for horizontal scaling.
+
+The PostgreSQL Deployment is used to run the database container. Although a StatefulSet is often preferred for production databases, a single Deployment with a PVC is enough here because the requirement is mainly to demonstrate persistence after pod deletion.
+
+The PersistentVolumeClaim is required for PostgreSQL data. Without it, database records would be lost whenever the PostgreSQL pod is recreated.
+
+The ConfigMap is used for normal configuration values such as database host, database name, and username. These values are environment-specific and should not be fixed inside the source code.
+
+The Secret is used for database passwords. It keeps sensitive values separate from normal configuration. In this assignment, the secret values are base64 encoded as Kubernetes expects.
+
+The PostgreSQL service gives the database a stable internal name, `postgres-service`. This is important because pod IPs can change when Kubernetes recreates pods.
+
+The Node.js service exposes the API pods through one stable endpoint. NodePort is useful in this project because it works well with Minikube testing.
+
+The Ingress resource is included to provide a cleaner HTTP entry point to the API. It depends on the NGINX ingress controller being enabled in Minikube.
+
+The HorizontalPodAutoscaler is used to show automatic scaling of the API tier. It increases or decreases Node.js replicas based on CPU utilization.
+
+Minikube is used because it provides a quick local Kubernetes environment before using cloud resources. GKE is used for the final deployment because it provides a managed Kubernetes cluster on Google Cloud. kubectl is used in both environments to apply manifests, check resource status, and test recovery behavior.
+
+Together, these resources cover the main parts of the assignment: containerization, Kubernetes deployment, configuration, secret handling, persistence, networking, self-healing, and autoscaling.

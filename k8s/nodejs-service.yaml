@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: nodejs-service
+  name: ashish-3162696-kubernetes-and-devops-advance-service
 spec:
   selector:
-    app: nodejs-api
+    app: ashish_3162696_kubernetes_and_devops_advance-api
   ports:
     - protocol: TCP
       port: 80

@@ -12,6 +12,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: nodejs-service
+                name: ashish-3162696-kubernetes-and-devops-advance-service
+
                 port:
                   number: 80
