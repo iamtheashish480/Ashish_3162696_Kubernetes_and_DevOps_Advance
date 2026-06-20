@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
         - name: ashish-3162696-kubernetes-and-devops-advance-app
-          image: iamashish480/ashish_3162696_kubernetes_and_devops_advance-app:v3 # Replace with your actual image4
+          image: iamashish480/ashish_3162696_kubernetes_and_devops_advance-app:v4 # versionsing of the app
           imagePullPolicy: Always 
           ports:
             - containerPort: 8000

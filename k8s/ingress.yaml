@@ -15,4 +15,4 @@ spec:
                 name: ashish-3162696-kubernetes-and-devops-advance-service
 
                 port:
-                  number: 80
+                  number: 80   #port

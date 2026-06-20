@@ -1,4 +1,4 @@
-const express = require('express');
+const express = require('express'); // we are using nodejs to crateate a micro service
 const  pool  = require('./pool');
 
 const app = express();
@@ -11,7 +11,7 @@ app.get('/', (req, res) => {
 });
 
 // Get all employees
-app.get('/data', async (req, res) => {
+app.get('/data', async (req, res) => { // path to get data
   try {
     const result = await pool.query(
       'SELECT id, name, role, department FROM employees'
@@ -22,6 +22,18 @@ app.get('/data', async (req, res) => {
     res.status(500).json({ message: 'Database error' });
   }
 });
+app.get('/employee', async (req, res) => { // path to get data
+  try {
+    const result = await pool.query(
+      'SELECT id, name, role, department FROM employees'
+    );
+    res.json(result.rows);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Database error' });
+  }
+});
+
 
 // Get employee by ID
 app.get('/data/:id', async (req, res) => {

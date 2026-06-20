@@ -22,10 +22,10 @@ git push -u origin main
 
 #docker rmi -f iamashish480/ashish_3162696_kubernetes_and_devops_advance-app:v1
 #docker system prune -a --volumes -f
-docker build --no-cache -t iamashish480/ashish_3162696_kubernetes_and_devops_advance-app:v1 .
+docker build --no-cache -t iamashish480/ashish_3162696_kubernetes_and_devops_advance-app:v4 . # no cache is used to not load from cache
 
-docker login
-docker push iamashish480/ashish_3162696_kubernetes_and_devops_advance-app:v1
+docker login #login is required for first time
+docker push iamashish480/ashish_3162696_kubernetes_and_devops_advance-app:v4
 
 # --------------------
 
@@ -79,3 +79,16 @@ kubectl get pods,pvc -w
 # HPA status
 
 kubectl get hpa
+
+gcloud container clusters get-credentials cluster-1 --zone us-east1-b --project ashish-3162696-k8s-devops // to get credentials for gke cluster in local kubeconfig
+
+
+iamashish480@cloudshell:~ (ashish-3162696-k8s-devops)$ gcloud container clusters list // to list all gke clusters in the project
+
+iamashish480@cloudshell:~ (ashish-3162696-k8s-devops)$ kubectl config current-context // to get current context of kubectl
+
+kubectl port-forward svc/ashish-3162696-kubernetes-and-devops-advance-service 8080:80 // to portforward from gke service to local machine
+
+kubectl patch svc ashish-3162696-kubernetes-and-devops-advance-service -p '{"spec":{"type":"LoadBalancer"}}'                                        // to change service type to LoadBalancer for external access
+
+us-east1-b
