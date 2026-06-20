@@ -11,7 +11,7 @@ This project demonstrates the deployment of a Node.js application with a Postgre
 | GitHub Repository     | https://github.com/iamtheashish480/Ashish_3162696_Kubernetes_and_DevOps_Advance                        |
 | Docker Hub Repository | https://hub.docker.com/repository/docker/iamashish480/ashish-3162696-kubernetes-devops-advance/general |
 | Application URL       | http://34.107.216.19/data    http://34.107.216.19.nip.io/data/2                                                            |
-| Demo Video            | Add your video link here                                                                               |
+| Demo Video            | https://drive.google.com/file/d/1e9emZTxQbGcUXT4XXif8yAm5NSOy86qe/view?usp=sharing                                                                              |
 
 ---
 
