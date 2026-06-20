@@ -80,7 +80,7 @@ kubectl get pods,pvc -w
 
 kubectl get hpa
 
-gcloud container clusters get-credentials cluster-1 --zone us-east1-b --project ashish-3162696-k8s-devops // to get credentials for gke cluster in local kubeconfig
+gcloud container clusters get-credentials ashish-3162696-kubernetes-and-devops-adv --zone us-east1-b --project ashish-3162696-k8s-devops // to get credentials for gke cluster in local kubeconfig
 
 
 iamashish480@cloudshell:~ (ashish-3162696-k8s-devops)$ gcloud container clusters list // to list all gke clusters in the project
